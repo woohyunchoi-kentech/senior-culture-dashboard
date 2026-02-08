@@ -151,6 +151,35 @@ function lnGamma(z: number): number {
   return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(x);
 }
 
+// === Cronbach's Alpha ===
+
+export function cronbachAlpha(items: number[][]): number {
+  // items: 각 문항별 응답 배열 (items[문항인덱스][응답자인덱스])
+  const k = items.length;
+  if (k < 2) return 0;
+  const n = items[0].length;
+  if (n < 2) return 0;
+
+  // 각 문항의 분산
+  const itemVariances = items.map((item) => {
+    const m = mean(item);
+    return item.reduce((acc, v) => acc + (v - m) ** 2, 0) / (n - 1);
+  });
+  const sumItemVar = itemVariances.reduce((a, b) => a + b, 0);
+
+  // 총점의 분산
+  const totals = Array.from({ length: n }, (_, i) =>
+    items.reduce((sum, item) => sum + item[i], 0)
+  );
+  const totalVar = (() => {
+    const m = mean(totals);
+    return totals.reduce((acc, v) => acc + (v - m) ** 2, 0) / (n - 1);
+  })();
+
+  if (totalVar === 0) return 0;
+  return (k / (k - 1)) * (1 - sumItemVar / totalVar);
+}
+
 // === 변수 추출 ===
 
 export function getConsumptionMean(r: Respondent): number {
