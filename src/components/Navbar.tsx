@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { href: '/correlation', label: '상관분석' },
   { href: '/regression', label: '회귀분석' },
   { href: '/mediation', label: '매개효과' },
+  { href: '/paper', label: '논문' },
   { href: '/data-manage', label: '데이터 관리' },
 ];
 
